@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
 import java.util.Date;
@@ -22,13 +21,12 @@ public class Blog {
     private int userId;
 
     //blog标题
-    @NotEmpty
+
     @Pattern(regexp = "^.{1,256}$",message = "最大256字符,不能有空格")
     @TableField(value = "title")
     private String title;
 
-    //blog内容
-    @NotEmpty(message = "blog内容不能为空")
+
     @TableField(value = "content")
     private String content;
 

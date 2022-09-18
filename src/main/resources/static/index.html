@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+        }
+		#header{
+			background-color:#A6C1EE;
+			height: 60px;
+			text-align:center;
+		}
+		#menu{
+			/* background-color:#FFD700; */
+			height:80%;width:30%;
+			float:left;
+			
+		}
+		#content{
+			/* background-color:#EEEEEE; */
+			height:80%;
+			width:50%;
+			float:left;
+		}
+		#right{
+			/* background-color:#A6C1EE; */
+			height:80%;
+			width:20%;
+			float:left;
+			
+		}
+		#footer{
+			/* background-color:#FFA500; */
+			clear:both;
+			text-align:center;
+			height: 60px;
+			font-size: 30px;
+		}
+		.menu_head{
+			font-size: 50px;
+			margin-left: 150px;
+            margin-top: 20px;
+		}
+		a{
+			text-decoration:none
+		}
+		#content_main{
+			font-size: 40px;
+		}
+    </style>
+</head>
+<body>
+	
+    <div id="app" class="container">
+            <div id="header" >
+            	<h1 style="margin-bottom:0;">欢迎:{{username}}  <a href="login.html"style="float: right" >退出</a><h1>
+            </div>
+            <div id="menu" >
+                <h1 style="margin-left: 100px">目录：</h1>
+                <h1 class="menu_head" href="#" v-for="(value, key, index) in alldata" @click="loadAvilable(value.title)">{{value.title}}</h1>
+            </div>
+            <div id="content" >
+            		<h1 style="font-size: 60px;">文章标题:{{titleName}}</h1>
+					<hr>
+					<div id="content_main">
+						{{content}}
+					</div>
+            </div>
+            <div id="right" >
+            		固定的分类专栏或者广告啥的巴拉巴拉
+            </div>
+            		
+            <div id="footer">
+            		  版权 © yourfirst.com
+					  欢迎访问
+					  <a href="https://mynode.lxhq.top" target="value"></a>
+            </div>
+            
+               
+               
+           
+    
+    </div>
+
+	<script src="js/vue.js"></script>
+    <script src="./js/axios.js"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el:"#app",
+			data:{
+				username:"admin",
+				titleName:"first",
+				content:"aaaaaaaa",
+                blob: {
+				    id:1,
+                    userId:1,
+                    title:"",
+                    content:"",
+                    },
+                alldata:[],
+
+
+
+
+			},
+            mounted: function() {
+
+                    axios.post("/BlogIndex/AllBlog").then(self=>{
+                        if(self.data.state == 0){
+                            this.titleName="暂无文章";
+                            this.content="暂无文章";
+                        }
+                        if(self.data.state==1){
+                            this.alldata = self.data.data;
+                            // this.data.title = self.data.data[0].title;
+                            this.titleName = self.data.data[0].title;
+                            // this.data.content = self.data.data[0].content;
+                            this.content = self.data.data[0].content;
+                            console.log(this.alldata);
+                        }
+                    });
+
+            },
+            methods:{
+                loadAvilable:function(p){
+                    axios({
+                        method: 'POST',
+                        url: '/BlogIndex/SelectBlog',
+                        data: {
+                            "id":this.blob.id,
+                            "title" : p
+                        },
+
+
+                    }).then(self=>{
+                        if(self.data.state==1){
+                            this.title = self.data.data[0].title;
+                            this.titleName = self.data.data[0].title;
+                            this.blob.content = self.data.data[0].content;
+                            this.content = self.data.data[0].content;
+                            console.log(self.data.data.content);
+                        }
+                    });
+                }
+            }
+		})
+	</script>
+</body>
+</html>

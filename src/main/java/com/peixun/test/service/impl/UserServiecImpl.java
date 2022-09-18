@@ -2,8 +2,8 @@ package com.peixun.test.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.peixun.test.entity.JsonUtil;
-import com.peixun.test.mapper.UserMapper;
 import com.peixun.test.entity.User;
+import com.peixun.test.mapper.UserMapper;
 import com.peixun.test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class UserServiecImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiecImpl extends ServiceImpl<UserMapper, User> implements UserService  {// UserDetailsService
 
     private static final int STATE_OK=1;
     private static final int STATE_EXCEPTION=0;
+
 
 
     @Autowired
@@ -70,4 +71,24 @@ public class UserServiecImpl extends ServiceImpl<UserMapper, User> implements Us
         return jsonUtil;
     }
 
+//
+//
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User u = new User();
+//        u.setUsername(username);
+//        Example<User> example = Example.of(u);
+//        Optional<User> optional  = userDao.findOne(example);
+//        u = optional.orElseGet(new Supplier<User>() {
+//            @Override
+//            public User get() {
+//                return null;
+//            }
+//        });
+//        if(u==null){
+//            return null;
+//        }
+//        org.springframework.security.core.userdetails.User user2 = new org.springframework.security.core.userdetails.User(u.getUname(),u.getUpwd());
+//        return user2;
+//    }
 }
